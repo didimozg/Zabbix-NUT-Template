@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>0e60ac85bc3941e2a1d66a048ff164da</uuid>
+            <name>UPS</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>559a4c8795194674845124029471375e</uuid>
+            <template>NUT UPS Universal EN</template>
+            <name>NUT UPS Universal EN</name>
+            <description>Universal template for NUT (Network UPS Tools) for Zabbix 7.&#13;
+Optimized for APC Smart-UPS.&#13;
+Requires UserParameter=upsmon[*] in the agent config.&#13;
+&#13;
+Source: https://github.com/didimozg&#13;
+License: GPL v3</description>
+            <groups>
+                <group>
+                    <name>UPS</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>16d235887e3e4b6a9f5e1463964890a1</uuid>
+                    <name>UPS Discovery</name>
+                    <key>upsmon[ups.discovery]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>7c2057391234456789ab012345678901</uuid>
+                            <name>UPS {#UPSNAME}: Battery Charge</name>
+                            <key>upsmon[{#UPSNAME},battery.charge]</key>
+                            <delay>1m</delay>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Battery</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>9d356840abcd4ef09123456789012345</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},battery.charge])&lt;20</expression>
+                                    <name>UPS {#UPSNAME}: Critical Battery Charge (&lt; 20%)</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>ae467951cdef4012a234567890123456</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},battery.charge])&lt;40</expression>
+                                    <name>UPS {#UPSNAME}: Low Battery Charge (&lt; 40%)</name>
+                                    <priority>HIGH</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>UPS {#UPSNAME}: Critical Battery Charge (&lt; 20%)</name>
+                                            <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},battery.charge])&lt;20</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        
+                        <item_prototype>
+                            <uuid>bf578a62def04123b345678901234567</uuid>
+                            <name>UPS {#UPSNAME}: Battery Voltage</name>
+                            <key>upsmon[{#UPSNAME},battery.voltage]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Battery</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>c0689b73ef0142348456789012345678</uuid>
+                            <name>UPS {#UPSNAME}: Runtime</name>
+                            <key>upsmon[{#UPSNAME},battery.runtime]</key>
+                            <delay>1m</delay>
+                            <units>s</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Battery</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>d179ac84f01243459567890123456789</uuid>
+                            <name>UPS {#UPSNAME}: Battery Temperature</name>
+                            <key>upsmon[{#UPSNAME},battery.temperature]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>ºC</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Environment</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>e28abd9501234456a678901234567890</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},battery.temperature])&gt;40</expression>
+                                    <name>UPS {#UPSNAME}: High Battery Temperature (&gt; 40°C)</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>f39bce0612344567b789012345678901</uuid>
+                            <name>UPS {#UPSNAME}: Input Voltage</name>
+                            <key>upsmon[{#UPSNAME},input.voltage]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Input</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>04acdf17234546788890123456789012</uuid>
+                            <name>UPS {#UPSNAME}: Input Frequency</name>
+                            <key>upsmon[{#UPSNAME},input.frequency]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Hz</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Input</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>15bdef28345647899901234567890123</uuid>
+                            <name>UPS {#UPSNAME}: Output Voltage</name>
+                            <key>upsmon[{#UPSNAME},output.voltage]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Output</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>26cefa3945674890a012345678901234</uuid>
+                            <name>UPS {#UPSNAME}: Output Current</name>
+                            <key>upsmon[{#UPSNAME},output.current]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>A</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Output</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>37df0b4056784901b123456789012345</uuid>
+                            <name>UPS {#UPSNAME}: Load</name>
+                            <key>upsmon[{#UPSNAME},ups.load]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Load</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>48e01c51678940128234567890123456</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},ups.load])&gt;90</expression>
+                                    <name>UPS {#UPSNAME}: Overload (&gt; 90%)</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>59f12d62789041239345678901234567</uuid>
+                            <name>UPS {#UPSNAME}: Status</name>
+                            <key>upsmon[{#UPSNAME},ups.status]</key>
+                            <delay>1m</delay>
+                            <valuemap>
+                                <name>UPS Battery Status EN</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>var s = value.trim();
+if (s.indexOf('OB') &gt; -1) return 2; // On Battery
+if (s.indexOf('LB') &gt; -1) return 3; // Low Battery
+if (s.indexOf('RB') &gt; -1) return 4; // Replace Battery
+if (s.indexOf('OL') &gt; -1) return 1; // Online
+if (s.indexOf('CHRG') &gt; -1) return 5; // Charging
+if (s.indexOf('TRIM') &gt; -1) return 6; // Trim
+if (s.indexOf('BOOST') &gt; -1) return 7; // Boost
+return 0; // Unknown</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Status</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>6a023e7389014234a456789012345678</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},ups.status])=2</expression>
+                                    <name>UPS {#UPSNAME}: On Battery Power</name>
+                                    <priority>HIGH</priority>
+                                    <description>Mains power is not present.</description>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>7b134f8490124345b567890123456789</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},ups.status])=3</expression>
+                                    <name>UPS {#UPSNAME}: CRITICAL Low Battery</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>8c245095012344568678901234567890</uuid>
+                                    <expression>last(/NUT UPS Universal EN/upsmon[{#UPSNAME},ups.status])=4</expression>
+                                    <name>UPS {#UPSNAME}: Battery Replacement Required</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>9d3561a6123445679789012345678901</uuid>
+                            <name>UPS {#UPSNAME}: Model</name>
+                            <key>upsmon[{#UPSNAME},ups.model]</key>
+                            <delay>12h</delay>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Inventory</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>ae4672b723454678a890123456789012</uuid>
+                            <name>UPS {#UPSNAME}: Serial Number</name>
+                            <key>upsmon[{#UPSNAME},ups.serial]</key>
+                            <delay>12h</delay>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Inventory</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>bf5783c834564789b901234567890123</uuid>
+                            <name>UPS {#UPSNAME}: Battery Date of Manufacture</name>
+                            <key>upsmon[{#UPSNAME},battery.mfr.date]</key>
+                            <delay>12h</delay>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Inventory</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <valuemaps>
+                <valuemap>
+                    <uuid>c06894d9456748908012345678901234</uuid>
+                    <name>UPS Battery Status EN</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Unknown</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Online</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>On Battery</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>Low Battery</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>Replace Battery</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>Charging</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>Trim</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>Boost</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+</zabbix_export>

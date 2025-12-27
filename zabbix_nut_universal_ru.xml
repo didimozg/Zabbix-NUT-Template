@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>0e60ac85bc3941e2a1d66a048ff164da</uuid>
+            <name>UPS</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>a1b2c3d4e5f64a1b8c2d3e4f5a6b7c8d</uuid>
+            <template>NUT UPS Universal RU</template>
+            <name>NUT UPS Universal RU</name>
+            <description>Универсальный шаблон для NUT (Network UPS Tools) для Zabbix 7.&#13;
+Оптимизирован для APC Smart-UPS.&#13;
+Требует наличия UserParameter=upsmon[*] в агенте.</description>
+            <groups>
+                <group>
+                    <name>UPS</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>b2c3d4e5f6a14b2c8d3e4f5a6b7c8d9e</uuid>
+                    <name>Обнаружение ИБП</name>
+                    <key>upsmon[ups.discovery]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>c3d4e5f6a1b24c3d8e4f5a6b7c8d9e0f</uuid>
+                            <name>ИБП {#UPSNAME}: Заряд батареи</name>
+                            <key>upsmon[{#UPSNAME},battery.charge]</key>
+                            <delay>1m</delay>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Battery</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>3456789abcde4f01823456789abcdef0</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},battery.charge])&lt;20</expression>
+                                    <name>ИБП {#UPSNAME}: Критический заряд батареи (&lt; 20%)</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>456789abcdef401283456789abcdef01</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},battery.charge])&lt;40</expression>
+                                    <name>ИБП {#UPSNAME}: Низкий заряд батареи (&lt; 40%)</name>
+                                    <priority>HIGH</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>ИБП {#UPSNAME}: Критический заряд батареи (&lt; 20%)</name>
+                                            <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},battery.charge])&lt;20</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        
+                        <item_prototype>
+                            <uuid>d4e5f6a1b2c34d4e8f5a6b7c8d9e0f1a</uuid>
+                            <name>ИБП {#UPSNAME}: Напряжение батареи</name>
+                            <key>upsmon[{#UPSNAME},battery.voltage]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Battery</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>e5f6a1b2c3d44e5f8a6b7c8d9e0f1a2b</uuid>
+                            <name>ИБП {#UPSNAME}: Время работы (Runtime)</name>
+                            <key>upsmon[{#UPSNAME},battery.runtime]</key>
+                            <delay>1m</delay>
+                            <units>s</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Battery</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>f6a1b2c3d4e54f6a8b7c8d9e0f1a2b3c</uuid>
+                            <name>ИБП {#UPSNAME}: Температура батареи</name>
+                            <key>upsmon[{#UPSNAME},battery.temperature]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>ºC</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Environment</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>56789abcdef041238456789abcdef012</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},battery.temperature])&gt;40</expression>
+                                    <name>ИБП {#UPSNAME}: Высокая температура батареи (&gt; 40°C)</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>a1b2c3d4e5f64012834567890abcdef1</uuid>
+                            <name>ИБП {#UPSNAME}: Входящее напряжение</name>
+                            <key>upsmon[{#UPSNAME},input.voltage]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Input</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>b2c3d4e5f6a1412384567890abcdef12</uuid>
+                            <name>ИБП {#UPSNAME}: Входящая частота</name>
+                            <key>upsmon[{#UPSNAME},input.frequency]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Hz</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Input</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>c3d4e5f6a1b242348567890abcdef123</uuid>
+                            <name>ИБП {#UPSNAME}: Выходное напряжение</name>
+                            <key>upsmon[{#UPSNAME},output.voltage]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Output</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>d4e5f6a1b2c34345867890abcdef1234</uuid>
+                            <name>ИБП {#UPSNAME}: Выходной ток</name>
+                            <key>upsmon[{#UPSNAME},output.current]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>A</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Output</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>e5f6a1b2c3d4445687890abcdef12345</uuid>
+                            <name>ИБП {#UPSNAME}: Нагрузка</name>
+                            <key>upsmon[{#UPSNAME},ups.load]</key>
+                            <delay>1m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Load</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>6789abcdef014234856789abcdef0123</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},ups.load])&gt;90</expression>
+                                    <name>ИБП {#UPSNAME}: Перегрузка (&gt; 90%)</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>f6a1b2c3d4e545678890abcdef123456</uuid>
+                            <name>ИБП {#UPSNAME}: Статус</name>
+                            <key>upsmon[{#UPSNAME},ups.status]</key>
+                            <delay>1m</delay>
+                            <valuemap>
+                                <name>UPS Battery Status RU</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>var s = value.trim();
+if (s.indexOf('OB') &gt; -1) return 2; // On Battery (От батареи)
+if (s.indexOf('LB') &gt; -1) return 3; // Low Battery (Низкий заряд)
+if (s.indexOf('RB') &gt; -1) return 4; // Replace Battery (Замените батарею)
+if (s.indexOf('OL') &gt; -1) return 1; // Online (От сети)
+if (s.indexOf('CHRG') &gt; -1) return 5; // Charging (Зарядка)
+if (s.indexOf('TRIM') &gt; -1) return 6; // Trim (Понижение напряжения)
+if (s.indexOf('BOOST') &gt; -1) return 7; // Boost (Повышение напряжения)
+return 0; // Unknown</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Status</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>789abcdef012434586789abcdef01234</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},ups.status])=2</expression>
+                                    <name>ИБП {#UPSNAME}: Работает от БАТАРЕИ</name>
+                                    <priority>HIGH</priority>
+                                    <description>Пропало входное питание.</description>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>89abcdef012344568789abcdef012345</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},ups.status])=3</expression>
+                                    <name>ИБП {#UPSNAME}: КРИТИЧЕСКИ Низкий заряд (Low Battery)</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>9abcdef0123445678890bcdef0123456</uuid>
+                                    <expression>last(/NUT UPS Universal RU/upsmon[{#UPSNAME},ups.status])=4</expression>
+                                    <name>ИБП {#UPSNAME}: Требуется замена батареи</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+
+                        <item_prototype>
+                            <uuid>0123456789ab4cde8f0123456789abcd</uuid>
+                            <name>ИБП {#UPSNAME}: Модель</name>
+                            <key>upsmon[{#UPSNAME},ups.model]</key>
+                            <delay>12h</delay>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Inventory</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>123456789abc4def80123456789abcde</uuid>
+                            <name>ИБП {#UPSNAME}: Серийный номер</name>
+                            <key>upsmon[{#UPSNAME},ups.serial]</key>
+                            <delay>12h</delay>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Inventory</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>23456789abcd4ef08123456789abcdef</uuid>
+                            <name>ИБП {#UPSNAME}: Дата производства батареи</name>
+                            <key>upsmon[{#UPSNAME},battery.mfr.date]</key>
+                            <delay>12h</delay>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Component</tag>
+                                    <value>Inventory</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <valuemaps>
+                <valuemap>
+                    <uuid>abcdef0123454678890acdef01234567</uuid>
+                    <name>UPS Battery Status RU</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Неизвестно</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>В сети (Online)</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>ОТ БАТАРЕИ</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>КРИТИЧЕСКИЙ РАЗРЯД</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>Замените батарею</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>Зарядка</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>Понижение (Trim)</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>Повышение (Boost)</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+</zabbix_export>
