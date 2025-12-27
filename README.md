@@ -1,0 +1,1 @@
+# Zabbix-NUT-Template
