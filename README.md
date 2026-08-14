@@ -139,7 +139,7 @@ zabbix_get -s 127.0.0.1 -k upsmon[apc,battery.charge]
 
 ## 📝 License
 
-This project is licensed under the **GPL v3** License.
+This project is licensed under the **MIT** License.
 Feel free to use, modify, and distribute this template.
 
 Author: [didimozg](https://github.com/didimozg)
